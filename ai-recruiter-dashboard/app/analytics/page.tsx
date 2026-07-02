@@ -46,8 +46,8 @@ export default function AnalyticsPage() {
     setError(null);
     try {
       const [sRes, rRes] = await Promise.all([
-        fetch("http://localhost:8000/stats"),
-        fetch("http://localhost:8000/rankings"),
+        fetch("https://recruiter-ai-pbgo.onrender.com/stats"),
+        fetch("https://recruiter-ai-pbgo.onrender.com/rankings"),
       ]);
 
       if (!sRes.ok || !rRes.ok) throw new Error("Could not load analytics datasets.");
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
       const details = await Promise.all(detailPromises);
       setTopCandidates(details);
     } catch (err: any) {
-      setError("FastAPI server connection error. Ensure http://localhost:8000 is active.");
+      setError("FastAPI server connection error. Ensure https://recruiter-ai-pbgo.onrender.com is active.");
     } finally {
       setLoading(false);
     }
@@ -253,7 +253,7 @@ export default function AnalyticsPage() {
 
           {/* ── 2x2 CHART GRID + 1 WIDE LAYOUT (Little bigger cards) ──────────────── */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            
+
             {/* Experience Distribution (Row 1 Left) */}
             <div className="border border-[#1F2942] bg-[#0D1220]/60 p-6 rounded-2xl shadow-xl flex flex-col justify-between min-h-[350px]">
               <div className="flex justify-between items-start mb-4">

@@ -112,7 +112,7 @@ function RankingsPageInner() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:8000/rankings", {
+      const res = await fetch("https://recruiter-ai-pbgo.onrender.com/rankings", {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
@@ -120,7 +120,7 @@ function RankingsPageInner() {
       const data: ApiRankingEntry[] = await res.json();
       setAllRows(data.map(deriveDefaults));
     } catch (err: any) {
-      setError("Could not reach FastAPI server. Ensure http://localhost:8000 is running.");
+      setError("Could not reach FastAPI server. Ensure https://recruiter-ai-pbgo.onrender.com is running.");
     } finally {
       setLoading(false);
     }
@@ -369,8 +369,8 @@ function RankingsPageInner() {
                           row.rank <= 3
                             ? "bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-lg shadow-amber-500/20"
                             : row.rank <= 10
-                            ? "bg-indigo-500/10 text-indigo-500"
-                            : "bg-[var(--surface-elevated)] text-[var(--muted)]"
+                              ? "bg-indigo-500/10 text-indigo-500"
+                              : "bg-[var(--surface-elevated)] text-[var(--muted)]"
                         )}
                       >
                         {row.rank}

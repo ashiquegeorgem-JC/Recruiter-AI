@@ -100,7 +100,7 @@ function DashboardPageInner() {
 
     try {
       setMatchingStep("Parsing job description and extracting tags...");
-      const response = await fetch("http://localhost:8000/match-job", {
+      const response = await fetch("https://recruiter-ai-pbgo.onrender.com/match-job", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -153,7 +153,7 @@ function DashboardPageInner() {
       setTimeout(() => setMatchSuccess(false), 4000);
     } catch (err: any) {
       console.error(err);
-      setError("Failed to communicate with match endpoint. Ensure FastAPI server is running on http://localhost:8000");
+      setError("Failed to communicate with match endpoint. Ensure FastAPI server is running on https://recruiter-ai-pbgo.onrender.com");
       setIsMatching(false);
     }
   };

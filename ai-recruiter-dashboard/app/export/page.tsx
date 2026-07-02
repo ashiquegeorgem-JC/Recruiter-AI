@@ -72,41 +72,41 @@ function deriveRow(entry: ApiRankingEntry): ExportRow {
 // ── Column / preset / format config ──────────────────────────────────────────
 
 const defaultColumns: ExportColumn[] = [
-  { key: "rank",              label: "Rank",          enabled: true },
-  { key: "id",                label: "Candidate ID",  enabled: true },
-  { key: "name",              label: "Name",          enabled: true },
-  { key: "title",             label: "Title",         enabled: true },
-  { key: "matchScore",        label: "Match Score",   enabled: true },
-  { key: "hireabilityScore",  label: "Hireability",   enabled: true },
-  { key: "riskScore",         label: "Risk Score",    enabled: true },
-  { key: "status",            label: "Status",        enabled: true },
-  { key: "appliedDate",       label: "Applied Date",  enabled: true },
+  { key: "rank", label: "Rank", enabled: true },
+  { key: "id", label: "Candidate ID", enabled: true },
+  { key: "name", label: "Name", enabled: true },
+  { key: "title", label: "Title", enabled: true },
+  { key: "matchScore", label: "Match Score", enabled: true },
+  { key: "hireabilityScore", label: "Hireability", enabled: true },
+  { key: "riskScore", label: "Risk Score", enabled: true },
+  { key: "status", label: "Status", enabled: true },
+  { key: "appliedDate", label: "Applied Date", enabled: true },
 ];
 
 const presets: { value: ExportPreset; label: string; description: string }[] = [
-  { value: "all",        label: "All Candidates", description: "Export all ranked candidates" },
-  { value: "top100",     label: "Top 100",        description: "Top 100 by match score" },
-  { value: "shortlisted",label: "Shortlisted",    description: "Only shortlisted candidates" },
-  { value: "high-risk",  label: "High Risk",      description: "Risk score ≥ 25" },
+  { value: "all", label: "All Candidates", description: "Export all ranked candidates" },
+  { value: "top100", label: "Top 100", description: "Top 100 by match score" },
+  { value: "shortlisted", label: "Shortlisted", description: "Only shortlisted candidates" },
+  { value: "high-risk", label: "High Risk", description: "Risk score ≥ 25" },
 ];
 
 const formatOptions: { value: ExportFormat; label: string; icon: typeof FileJson; description: string }[] = [
-  { value: "csv",  label: "CSV",  icon: FileSpreadsheet, description: "Comma-separated values" },
-  { value: "json", label: "JSON", icon: FileJson,        description: "JavaScript Object Notation" },
-  { value: "pdf",  label: "PDF",  icon: FileText,        description: "Portable Document Format" },
+  { value: "csv", label: "CSV", icon: FileSpreadsheet, description: "Comma-separated values" },
+  { value: "json", label: "JSON", icon: FileJson, description: "JavaScript Object Notation" },
+  { value: "pdf", label: "PDF", icon: FileText, description: "Portable Document Format" },
 ];
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function ExportPage() {
-  const [format,      setFormat]      = useState<ExportFormat>("csv");
-  const [preset,      setPreset]      = useState<ExportPreset>("all");
-  const [columns,     setColumns]     = useState<ExportColumn[]>(defaultColumns);
-  const [allRows,     setAllRows]     = useState<ExportRow[]>([]);
-  const [loading,     setLoading]     = useState(true);
-  const [error,       setError]       = useState<string | null>(null);
-  const [exporting,   setExporting]   = useState(false);
-  const [exported,    setExported]    = useState(false);
+  const [format, setFormat] = useState<ExportFormat>("csv");
+  const [preset, setPreset] = useState<ExportPreset>("all");
+  const [columns, setColumns] = useState<ExportColumn[]>(defaultColumns);
+  const [allRows, setAllRows] = useState<ExportRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(false);
 
   // ── Fetch from FastAPI ──────────────────────────────────────────────────────
 
@@ -114,7 +114,7 @@ export default function ExportPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:8000/rankings", {
+      const res = await fetch("https://recruiter-ai-pbgo.onrender.com/rankings", {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
@@ -122,7 +122,7 @@ export default function ExportPage() {
       const data: ApiRankingEntry[] = await res.json();
       setAllRows(data.map(deriveRow));
     } catch {
-      setError("Could not reach FastAPI server. Ensure http://localhost:8000 is running.");
+      setError("Could not reach FastAPI server. Ensure https://recruiter-ai-pbgo.onrender.com is running.");
     } finally {
       setLoading(false);
     }
@@ -134,9 +134,9 @@ export default function ExportPage() {
 
   const previewData: ExportRow[] = (() => {
     let rows = [...allRows];
-    if (preset === "top100")      rows = rows.slice(0, 100);
+    if (preset === "top100") rows = rows.slice(0, 100);
     if (preset === "shortlisted") rows = rows.filter((r) => r.status === "shortlisted");
-    if (preset === "high-risk")   rows = rows.filter((r) => r.riskScore >= 25);
+    if (preset === "high-risk") rows = rows.filter((r) => r.riskScore >= 25);
     return rows;
   })();
 
