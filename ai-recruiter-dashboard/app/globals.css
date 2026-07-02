@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@import "tailwindcss";
+
+/* ── Redrob AI Talent Intelligence Platform System ──────────────────────── */
+
+:root {
+  /* Exact color specification */
+  --background:        #070B14; /* Deep Navy */
+  --surface:           #0D1220; /* Dark Slate Blue */
+  --surface-elevated:  #151C30; /* Elevated glass/card layer */
+  --border:            #1F2942; /* Custom border */
+  --border-muted:      #121827;
+  --foreground:        #F8FAFC; /* Off-white */
+  --muted:             #94A3B8; /* Cool Slate Gray */
+  --muted-foreground:  #475569; /* Darker Slate */
+
+  /* Purple Accent */
+  --brand-50:          #EEF2FF;
+  --brand-100:         #E0E7FF;
+  --brand-500:         #7C4DFF; /* Exact Accent */
+  --brand-600:         #6C3BEF;
+  --brand-900:         #311B92;
+
+  /* Standard status colors */
+  --success:           #10B981;
+  --warning:           #F59E0B;
+  --danger:            #EF4444;
+
+  --sidebar-bg:        #070B14;
+  --sidebar-border:    #151C30;
+}
+
+html, body {
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  color-scheme: dark;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom glow card */
+.glow-card-purple {
+  position: relative;
+}
+.glow-card-purple::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, rgba(124, 77, 255, 0.4) 0%, transparent 40%);
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Premium scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-500);
+}
+
+/* Clean circular gauge */
+.circular-progress {
+  transform: rotate(-90deg);
+}
+
+.circular-progress-circle {
+  stroke-dasharray: 251.2;
+  transition: stroke-dashoffset 0.35s;
+  transform-origin: 50% 50%;
+}

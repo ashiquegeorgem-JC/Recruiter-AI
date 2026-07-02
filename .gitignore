@@ -1,0 +1,12 @@
+backend/candidates.jsonl
+dataset/candidates.jsonl
+*.jsonl
+
+backend/__pycache__/
+backend/*.pyc
+
+node_modules/
+.next/
+venv/
+.env
+.env.local
