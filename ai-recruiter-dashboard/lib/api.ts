@@ -24,7 +24,7 @@ import {
 
 // ── FastAPI Backend Config ────────────────────────────────────────────────────
 
-const API_BASE_URL = "https://recruiter-ai-pbgo.onrender.com";
+const API_BASE_URL = "http://localhost:8000";
 // ── FastAPI Response Types ────────────────────────────────────────────────────
 
 export interface BackendStats {

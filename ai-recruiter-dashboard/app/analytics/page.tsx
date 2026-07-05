@@ -46,8 +46,8 @@ export default function AnalyticsPage() {
     setError(null);
     try {
       const [sRes, rRes] = await Promise.all([
-        fetch("https://recruiter-ai-pbgo.onrender.com/stats"),
-        fetch("https://recruiter-ai-pbgo.onrender.com/rankings"),
+        fetch("http://localhost:8000/stats"),
+        fetch("http://localhost:8000/rankings"),
       ]);
 
       if (!sRes.ok || !rRes.ok) throw new Error("Could not load analytics datasets.");
@@ -64,7 +64,7 @@ export default function AnalyticsPage() {
       const details = await Promise.all(detailPromises);
       setTopCandidates(details);
     } catch (err: any) {
-      setError("FastAPI server connection error. Ensure https://recruiter-ai-pbgo.onrender.com is active.");
+      setError("FastAPI server connection error. Ensure http://localhost:8000 is active.");
     } finally {
       setLoading(false);
     }

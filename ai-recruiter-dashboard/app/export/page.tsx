@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import {
@@ -16,7 +16,7 @@ import {
 import type { ExportFormat, ExportPreset, ExportColumn } from "@/lib/types";
 import { cn, scoreColor, formatScore, formatDate, statusColor } from "@/lib/utils";
 
-// ── FastAPI response shape ────────────────────────────────────────────────────
+// â”€â”€ FastAPI response shape â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ApiRankingEntry {
   rank: number;
@@ -27,7 +27,7 @@ interface ApiRankingEntry {
   experience: number;
 }
 
-// ── Internal row shape (only fields needed for export) ────────────────────────
+// â”€â”€ Internal row shape (only fields needed for export) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 interface ExportRow {
   rank: number;
@@ -41,7 +41,7 @@ interface ExportRow {
   appliedDate: string;
 }
 
-// ── Deterministic defaults (mirrors rankings page logic) ──────────────────────
+// â”€â”€ Deterministic defaults (mirrors rankings page logic) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function deriveRow(entry: ApiRankingEntry): ExportRow {
   const hireabilityScore = Math.min(99, Math.max(40, Math.round(entry.match_score * 0.88 - entry.rank * 0.3)));
@@ -69,7 +69,7 @@ function deriveRow(entry: ApiRankingEntry): ExportRow {
   };
 }
 
-// ── Column / preset / format config ──────────────────────────────────────────
+// â”€â”€ Column / preset / format config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const defaultColumns: ExportColumn[] = [
   { key: "rank", label: "Rank", enabled: true },
@@ -87,7 +87,7 @@ const presets: { value: ExportPreset; label: string; description: string }[] = [
   { value: "all", label: "All Candidates", description: "Export all ranked candidates" },
   { value: "top100", label: "Top 100", description: "Top 100 by match score" },
   { value: "shortlisted", label: "Shortlisted", description: "Only shortlisted candidates" },
-  { value: "high-risk", label: "High Risk", description: "Risk score ≥ 25" },
+  { value: "high-risk", label: "High Risk", description: "Risk score â‰¥ 25" },
 ];
 
 const formatOptions: { value: ExportFormat; label: string; icon: typeof FileJson; description: string }[] = [
@@ -96,7 +96,7 @@ const formatOptions: { value: ExportFormat; label: string; icon: typeof FileJson
   { value: "pdf", label: "PDF", icon: FileText, description: "Portable Document Format" },
 ];
 
-// ── Page ──────────────────────────────────────────────────────────────────────
+// â”€â”€ Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export default function ExportPage() {
   const [format, setFormat] = useState<ExportFormat>("csv");
@@ -108,13 +108,13 @@ export default function ExportPage() {
   const [exporting, setExporting] = useState(false);
   const [exported, setExported] = useState(false);
 
-  // ── Fetch from FastAPI ──────────────────────────────────────────────────────
+  // â”€â”€ Fetch from FastAPI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const loadData = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("https://recruiter-ai-pbgo.onrender.com/rankings", {
+      const res = await fetch("http://localhost:8000/rankings", {
         headers: { Accept: "application/json" },
         cache: "no-store",
       });
@@ -122,7 +122,7 @@ export default function ExportPage() {
       const data: ApiRankingEntry[] = await res.json();
       setAllRows(data.map(deriveRow));
     } catch {
-      setError("Could not reach FastAPI server. Ensure https://recruiter-ai-pbgo.onrender.com is running.");
+      setError("Could not reach FastAPI server. Ensure http://localhost:8000 is running.");
     } finally {
       setLoading(false);
     }
@@ -130,7 +130,7 @@ export default function ExportPage() {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  // ── Apply preset filter ─────────────────────────────────────────────────────
+  // â”€â”€ Apply preset filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const previewData: ExportRow[] = (() => {
     let rows = [...allRows];
@@ -140,7 +140,7 @@ export default function ExportPage() {
     return rows;
   })();
 
-  // ── Column helpers ──────────────────────────────────────────────────────────
+  // â”€â”€ Column helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const toggleColumn = (key: string) => {
     setColumns((prev) => prev.map((c) => (c.key === key ? { ...c, enabled: !c.enabled } : c)));
@@ -148,7 +148,7 @@ export default function ExportPage() {
 
   const enabledColumns = columns.filter((c) => c.enabled);
 
-  // ── Export handler ──────────────────────────────────────────────────────────
+  // â”€â”€ Export handler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   const handleExport = async () => {
     setExporting(true);
@@ -173,7 +173,6 @@ export default function ExportPage() {
       const blob = new Blob([csv], { type: "text/csv" });
       downloadBlob(blob, "candidates.csv");
     } else {
-      // PDF placeholder — exports as JSON
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
       downloadBlob(blob, "candidates_data.json");
     }
@@ -194,7 +193,7 @@ export default function ExportPage() {
     URL.revokeObjectURL(url);
   };
 
-  // ── Error state ─────────────────────────────────────────────────────────────
+  // â”€â”€ Error state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   if (error) {
     return (
@@ -214,7 +213,7 @@ export default function ExportPage() {
     );
   }
 
-  // ── Render ──────────────────────────────────────────────────────────────────
+  // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
   return (
     <div className="space-y-6 max-w-[1400px] mx-auto">
@@ -357,7 +356,7 @@ export default function ExportPage() {
               <h2 className="text-sm font-semibold text-[var(--foreground)]">Preview</h2>
             </div>
             <span className="text-xs text-[var(--muted)]">
-              {previewData.length} rows • {enabledColumns.length} columns
+              {previewData.length} rows &bull; {enabledColumns.length} columns
             </span>
           </div>
 
@@ -414,7 +413,6 @@ export default function ExportPage() {
                       </tr>
                     );
                   })}
-
                 </tbody>
               </table>
             )}
@@ -430,3 +428,4 @@ export default function ExportPage() {
     </div>
   );
 }
+
